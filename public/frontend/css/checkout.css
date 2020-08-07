@@ -1,0 +1,34 @@
+.StripeElement--webkit-autofill {
+    background-color: #fefde5 !important;
+}
+.form-row {
+    width: 65%;
+    float: left;
+}
+div#payment-form {
+    background: #f7f8f9;
+    padding: 50px;
+}
+button#st-btn {
+    width: 32%;
+    padding: 11px;
+    margin-left: 10px;
+    margin-top: 21px;
+    background: #43458b;
+    border: none;
+    color: #fff;
+    height: 42px;
+    line-height: 40px;
+    padding: 0 14px;
+    box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+    cursor: pointer;
+}
+div#card-errors {
+    padding: 6px 0;
+    color: #fa755a;
+    font-weight: 600;
+}

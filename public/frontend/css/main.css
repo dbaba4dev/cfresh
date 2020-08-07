@@ -1,0 +1,57 @@
+/*.prod_image {*/
+/*    width:540px;*/
+/*    height:450px;*/
+/*    background-color:grey;*/
+/*    margin:auto;*/
+/*    background-image:url(frontend/wp-content/uploads/2018/01/slider-dark-bottle.png);*/
+/*    background-repeat:no-repeat;*/
+/*    animation-name: slide;*/
+/*    animation-duration: 13s;*/
+/*    animation-direction: normal;*/
+/*    animation-timing-function: ease;*/
+/*    animation-iteration-count: infinite;*/
+/*}*/
+/*!* animation *!*/
+/*@keyframes slide {*/
+/*    0% {background-image: url(frontend/wp-content/uploads/2018/01/bottle.png) }*/
+/*    50% {background-image: url(frontend/wp-content/slider-dark-bottle.png) }*/
+/*    100% {background-image: url(frontend/wp-content/uploads/2018/01/bottle.png) }*/
+/*    !*49.98% {background-position:-800px 0;}*!*/
+/*    !*66.64% {background-position:-1600px 0;}*!*/
+/*    !*83.30% {background-position:-1600px 0;}*!*/
+/*    !*100% {background-position:0 0;}*!*/
+/*}*/
+
+#wrapper{
+    width: 600px;
+    /*margin: 0 auto;*/
+}
+
+#slider{
+    width: 600px;
+    height: 550px;
+    overflow: hidden;
+
+}
+
+#slider img{
+    width: 600px;
+    height: 550px;
+    display: none;
+
+}
+
+#wrapper a{
+    padding: 5px 5px;
+    background: dodgerblue;
+    color: #fff;
+    text-decoration: none;
+}
+
+#wrapper #previous{
+    float: left;
+}
+
+#wrapper #next{
+    float: right;
+}
