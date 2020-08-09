@@ -44,7 +44,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use App\Classes\fpdf\FPDF;
+
 use PDF;
 use Symfony\Component\Intl\Currencies;
 
@@ -1147,6 +1147,25 @@ footer {
     <footer>
       Invoice was created on a computer and is valid without the signature and seal.
     </footer>
+    
+    <script type="text/php">
+        if ( isset($pdf) ) {
+            // OLD 
+            // $font = Font_Metrics::get_font("helvetica", "bold");
+            // $pdf->page_text(72, 18, "{PAGE_NUM} of {PAGE_COUNT}", $font, 6, array(255,0,0));
+            // v.0.7.0 and greater
+            $x = 72;
+            $y = 18;
+            $text = "{PAGE_NUM} of {PAGE_COUNT}";
+            $font = $fontMetrics->get_font("helvetica", "bold");
+            $size = 6;
+            $color = array(255,0,0);
+            $word_space = 0.0;  //  default
+            $char_space = 0.0;  //  default
+            $angle = 0.0;   //  default
+            $pdf->page_text($x, $y, $text, $font, $size, $color, $word_space, $char_space, $angle);
+        }
+    </script>
   </body>
 </html>';
 
@@ -1155,7 +1174,7 @@ footer {
 
 // (Optional) Setup the paper size and orientation
         $dompdf->setPaper('A4', 'landscape');
-//        $dompdf->setOptions( )
+        $dompdf->set_option("isPhpEnabled", true);
 
 // Render the HTML as PDF
         $dompdf->render();
@@ -1410,7 +1429,6 @@ footer {
                 'message' => 'Order Status has been Updated Successfully!',
                 'alert-type' => 'success'
             );
-
             return redirect()->back()->with($notification);
         }
     }
@@ -1457,20 +1475,34 @@ footer {
 
                 for ($i=$first; $i<= $last; $i++)
                 {
-                    $balance_closing['prod'.$i] = Store::where('box_id',$i)->whereBetween('created_at', [$from, $to])->latest()->first()->balance;
-                    $balance_opening['prod'.$i] = Store::where('box_id',$i)->whereBetween('created_at', [$from, $to])->first()->balance;
-                    $in_flow['prod'.$i] = Store::where('box_id',$i)->where('flow','In flow')->whereBetween('created_at', [$from, $to])->sum('quantity');
-                    $out_flow['prod'.$i] = Store::where('box_id',$i)->where('flow','Out flow')->whereBetween('created_at', [$from, $to])->sum('quantity');
+                    $balance_closing['prod'.$i] =!empty(Store::where('box_id',$i)->whereBetween('created_at', [$from, $to])->latest()->first()) ?
+                        Store::where('box_id',$i)->whereBetween('created_at', [$from, $to])->latest()->first()->balance : 0;
+                    $balance_opening['prod'.$i] =!empty(Store::where('box_id',$i)->whereBetween('created_at', [$from, $to])->first()) ?
+                        Store::where('box_id',$i)->whereBetween('created_at', [$from, $to])->first()->balance : 0;
+                    $in_flow['prod'.$i] =!empty(Store::where('box_id',$i)->where('flow','In flow')->whereBetween('created_at', [$from, $to])) ?
+                        Store::where('box_id',$i)->where('flow','In flow')->whereBetween('created_at', [$from, $to])->sum('quantity') : 0;
+                    $out_flow['prod'.$i] = !empty(Store::where('box_id',$i)->where('flow','Out flow')->whereBetween('created_at', [$from, $to])) ?
+                        Store::where('box_id',$i)->where('flow','Out flow')->whereBetween('created_at', [$from, $to])->sum('quantity') : 0;
                 }
 
+
                 $pdf = PDF::loadView('admin.products.store_pdfview', ['PDFReport' => $PDFReport, 'from'=>$from, 'to'=>$to,
-                    'balance_opening'=>$balance_opening, 'balance_closing'=>$balance_closing, 'in_flow'=>$in_flow, 'out_flow'=>$out_flow, 'cases'=>$cases])
-                    ->setPaper('a4', 'landscape');
+                    'balance_opening'=>$balance_opening, 'balance_closing'=>$balance_closing, 'in_flow'=>$in_flow, 'out_flow'=>$out_flow, 'cases'=>$cases]);
 
-
-
-
-                return $pdf->download('store-report.pdf');
+                $pdf->setOptions([
+                    "isPhpEnabled" => true,
+                    'footer-center' => 'Page [page] of [toPage]',
+                    'footer-right' => '[date]',
+                    'footer-line' => true,
+                    'footer-left' => 'cfresh.org',
+                    'footer-font-size' => 8,
+                    'enable-javascript' => true,
+                    'javascript-delay' => 5000,
+                    'enable-smart-shrinking' => true,
+                    'no-stop-slow-scripts' => true,
+                    'margin-top' => 10,
+                ]);
+                return $pdf->stream('store-report.pdf');
             }
         }
         else
@@ -1479,6 +1511,8 @@ footer {
 //            $ViewsPage = Order::with('orders')->where('user_id',$id)->get();
             return view('admin.products.index', compact('employees','cases','products'));
         }
+
+        return view('admin.products.index', compact('employees','cases','products'));
 
     }
 
@@ -1581,7 +1615,6 @@ footer {
 
     public function placeOrder(Request $request)
     {
-
         $setting = Setting::find(1);
 
         if ($request->isMethod('post'))
@@ -1792,7 +1825,7 @@ footer {
 //                dd($prod_sum['prod2']);
                 $pdf = PDF::loadView('admin.orders.order_history_pdfview', ['PDFReport' => $PDFReport, 'from'=>$from, 'to'=>$to, 'total_discount'=>$total_discount, 'user'=>$user,
                     'total_amount'=>$total_amount, 'prod_sum'=>$prod_sum, 'total_paid'=>$total_paid, 'total_balance'=>$total_balance])->setPaper('a4', 'landscape');
-                return $pdf->download('Order_history-report.pdf');
+                return $pdf->stream('Order_history-report.pdf');
             }
         }
         else

@@ -471,6 +471,8 @@ class CustomersController extends Controller
              $ar_price = $data['price'];
              $ar_pro_name = $data['pro_name'];
 
+            
+
              $sub_total = $data['sub_total'];
              $coupon_code = !empty($data['code']) ? Coupon::where('id',$data['code'])->first()->coupon_code : '';
              $discount = $data['discount'];

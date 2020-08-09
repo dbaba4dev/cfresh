@@ -36,6 +36,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="PhpWorkspaceProjectConfiguration">
     <include_path>
       <path value="$PROJECT_DIR$/vendor/dnoegel/php-xdg-base-dir" />
@@ -144,10 +147,7 @@
       <path value="$PROJECT_DIR$/vendor/markbaker/matrix" />
       <path value="$PROJECT_DIR$/vendor/maatwebsite/excel" />
       <path value="$PROJECT_DIR$/vendor/barryvdh/laravel-dompdf" />
-      <path value="$PROJECT_DIR$/vendor/stripe/stripe-php" />
-      <path value="$PROJECT_DIR$/vendor/laravel/cashier" />
       <path value="$PROJECT_DIR$/vendor/cartalyst/stripe" />
-      <path value="$PROJECT_DIR$/vendor/moneyphp/money" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php80" />
       <path value="$PROJECT_DIR$/vendor/symfony/debug" />
       <path value="$PROJECT_DIR$/vendor/guzzlehttp/guzzle" />
@@ -164,9 +164,13 @@
       <path value="$PROJECT_DIR$/vendor/myclabs/php-enum" />
       <path value="$PROJECT_DIR$/vendor/psr/http-factory" />
       <path value="$PROJECT_DIR$/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/vendor/h4cc/wkhtmltopdf-amd64" />
+      <path value="$PROJECT_DIR$/vendor/barryvdh/laravel-snappy" />
+      <path value="$PROJECT_DIR$/vendor/h4cc/wkhtmltoimage-amd64" />
     </include_path>
   </component>
   <component name="ProjectId" id="1ZSIuHk8HpZet1neN9M4OBvoi8u" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="DatabaseDriversLRU" value="sqlserver&#10;mysql" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -261,11 +265,26 @@
       <workItem from="1595916797755" duration="92658000" />
       <workItem from="1596262426343" duration="86327000" />
       <workItem from="1596553384509" duration="42858000" />
+      <workItem from="1596806955013" duration="39264000" />
+      <workItem from="1596952799702" duration="18633000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
