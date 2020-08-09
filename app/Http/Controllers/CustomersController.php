@@ -423,6 +423,8 @@ class CustomersController extends Controller
         if ($request->isMethod('post')) {
             $data = $request->all();
             $id = $data['id'];
+            $customer_id = $data['customer_id'];
+            $coupon_arr = array();
 //            dd($id);
             if (isset($data['getPriceQty'])) {
                 $product = Store::with('box')->where('box_id', $id)->latest('id')->first();
@@ -432,7 +434,7 @@ class CustomersController extends Controller
         }
     }
 
-    public function getDiscount(Request $request)
+    /*public function getDiscount(Request $request)
     {
         if ($request->isMethod('post')) {
             $data = $request->all();
@@ -455,6 +457,42 @@ class CustomersController extends Controller
             echo $couponAmount;
             exit();
         }
+    }*/
+    public function getCoupon(Request $request)
+    {
+        if ($request->isMethod('post')) {
+            $data = $request->all();
+            $customer_id = $data['id'];
+            $coupon_arr = array();
+            $amount_type = '';
+            $couponCode = '';
+            $couponAmount = 0;
+
+            if (!empty($customer_id)) {
+                $coupon = Coupon::where('user_id', $customer_id)->first();
+                $sales_rep_id = User::where('id',$customer_id)->first()->vendor;
+                $sales_rep_name = Employee::where('id',$sales_rep_id)->first()->name;
+                //Check if amount type is Fixed or Percentage
+                /*if($coupon->amount_type == 'Fixed')
+                {
+                    $couponAmount = $coupon->amount* (int)($total_qty);
+                }else
+                {
+                    $couponAmount =(float)($sub_total) * ($coupon->amount)/100 ;
+                }*/
+                if (!empty($coupon)){
+                    $couponAmount = $coupon->amount;
+                    $couponCode = !empty($coupon->coupon_code) ? $coupon->coupon_code : null;
+                    $amount_type =!empty( $coupon->amount_type) ?  $coupon->amount_type : null;
+                }
+                $coupon_arr = [$couponCode, $couponAmount, $amount_type, $sales_rep_id, $sales_rep_name];
+
+            }
+//            $coupon_arr = json_decode(json_encode($coupon_arr));
+//            echo '<pre>'; print_r($coupon_arr);
+            echo json_encode($coupon_arr);
+            exit();
+        }
     }
 
     public function order_place(Request $request)
@@ -472,7 +510,8 @@ class CustomersController extends Controller
              $ar_pro_name = $data['pro_name'];
 
              $sub_total = $data['sub_total'];
-             $coupon_code = !empty($data['code']) ? Coupon::where('id',$data['code'])->first()->coupon_code : '';
+//             $coupon_code = !empty($data['code']) ? Coupon::where('id',$data['code'])->first()->coupon_code : '';
+             $coupon_code = !empty($customer->coupon) ? $customer->coupon->coupon_code : null;
              $discount = $data['discount'];
              $net_tot = $data['net_total'];
              $paid = $data['paid'];

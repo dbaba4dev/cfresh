@@ -50,7 +50,7 @@
                                     <select name="employee" id="employee" class="form-control form-control-sm select2" required>
                                         <option value="">Select a Sale Rep.</option>
                                         @foreach($employees as $employee)
-                                            <option value="{{$employee->name}}"
+                                            <option value="{{$employee->id}}"
                                                     @if($userDetail->vendor == $employee->name)
                                                     selected
                                                 @endif

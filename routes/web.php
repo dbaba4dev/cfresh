@@ -327,6 +327,7 @@ Route::get('/customers', ['uses'=>'CustomersController@index', 'as'=>'customers'
 Route::post('customers/add/new_item', ['uses'=>'CustomersController@addNewRow', 'as'=>'add_new_item']);
 Route::post('customers/order/price', ['uses'=>'CustomersController@getPriceAndQty', 'as'=>'order.price']);
 Route::post('customers/get/discount', ['uses'=>'CustomersController@getDiscount', 'as'=>'get.discount']);
+Route::post('customers/get/coupon', ['uses'=>'CustomersController@getCoupon', 'as'=>'get.coupon']);
 Route::post('customers/order/placing', ['uses'=>'CustomersController@order_place', 'as'=>'order.place']);
 //Route::post('/customers/category/store', ['uses'=>'CustomerCategoryController@store', 'as'=>'customers.category.store']);
 
