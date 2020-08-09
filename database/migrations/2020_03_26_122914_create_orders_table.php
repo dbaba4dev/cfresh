@@ -27,9 +27,9 @@ class CreateOrdersTable extends Migration
             $table->string('mobile');
             $table->float('balance')->nullable();
             $table->float('amount_paid')->nullable();
-            $table->string('coupon_code');
-            $table->float('coupon_amount');
-            $table->float('grand_total');
+            $table->string('coupon_code')->nullable();
+            $table->float('coupon_amount')->default(0);
+            $table->float('grand_total')->default(0);
             $table->string('order_status');
             $table->string('payment_method');
             $table->timestamps();

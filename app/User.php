@@ -19,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','admin','status', 'old_balance','religion','dob', 'gender', 'pincode','religion','company_name'
+        'name', 'email', 'password','admin','status', 'old_balance','religion','dob', 'gender', 'pincode','religion','company_name', 'coupon_id'
     ];
 
     /**
@@ -55,6 +55,11 @@ class User extends Authenticatable
     public function lga()
     {
         return $this->belongsTo(Lga::class);
+    }
+
+    public function coupon()
+    {
+        return $this->hasOne(Coupon::class);
     }
 
     public static function getUsersOldBalanace($user_id)

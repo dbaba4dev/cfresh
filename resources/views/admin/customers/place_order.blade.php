@@ -54,14 +54,15 @@
                                             >{{$customer->name}}</option>
                                         @endforeach
                                     </select>
+                                    <input type="hidden" name="cust_id" id="cust_id">
                                 </div>
                             </div>
 
-                            <div class="card" style="box-shadow: 0 0 15px 0 lightgrey">
+                            <div class="card" style="box-shadow: 0 0 15px 0 lightgrey"  >
                                 <div class="card-body" style="margin-bottom: -15px">
                                     <h3>Make Order List</h3>
-                                    <div class="table-responsive" style="font-size: 0.8rem">
-                                        <table id="order_list" class="table table-striped table-bordered table-sm" style="width: 800px;">
+                                    <div class="table-responsive" style="font-size: 0.8rem" >
+                                        <table id="order_list" class="table table-striped table-bordered table-sm" style="width: 800px;" hidden>
                                             <thead>
                                             <tr>
                                                 <th>#</th>
@@ -100,22 +101,20 @@
                             </div>
 
                             <div class="form-group row">
+                                <label for="coupon_code" class="col-sm-3" style="text-align: right">Coupon Code</label>
+                                <div class="col-sm-3">
+                                    <input type="text" name="coupon_code" class="form-control form-control-sm " id="coupon_code" readonly>
+                                </div>
+
+                                <input type="hidden" id="amount">
+                                <input type="hidden" id="amount_type">
+
+
+                            </div>
+                            <div class="form-group row">
                                 <label for="sub_total" class="col-sm-3" style="text-align: right">Sub Total</label>
                                 <div class="col-sm-3">
                                     <input type="text" name="sub_total" class="form-control form-control-sm digit" id="sub_total" readonly>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="coupon_code" class="col-sm-3" style="text-align: right">Coupon Code</label>
-                                <div class="col-sm-3">
-                                    <select name="coupon_code" id="coupon_code" class="form-control form-control-sm" required>
-                                        <option value="{{0}}" selected ></option>
-                                        @foreach($coupons as $coupon)
-                                            <option value="{{$coupon->id}}">{{$coupon->coupon_code}}</option>
-                                        @endforeach
-
-                                    </select>
-                                    <input type="hidden" name="code" id="code">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -135,16 +134,21 @@
                                 <div class="col-sm-3">
                                     <input type="text" name="paid" class="form-control form-control-sm digit" id="paid" value="0">
                                 </div>
-                                <div class="col-sm-2"></div>
-                                <div class="col-sm-2 float-right" id="emp_section">
-                                    <select name="employee_id" id="employee_id" class="form-control form-control-sm select2" required>
-                                        <option value="">Select Sales Rep.</option>
+{{--                                <div class="col-sm-1"></div>--}}
+{{--                                <div class="col-sm-6 float-right" id="emp_section">--}}
+{{--                                    <select name="employee_id" id="employee_id" class="form-control form-control-sm select2" required>--}}
+                                    <label for="employee_id" class="col-sm-2" style="text-align: right">Sales Rep.</label>
+                                        <div class="col-sm-3">
+                                            <input type="hidden" name="employee_id" class="form-control form-control-sm digit" id="employee_id" readonly>
+                                            <input type="text" name="employee_name" class="form-control form-control-sm digit" id="employee_name" readonly>
+                                        </div>
+                                       {{-- <option value="">Select Sales Rep.</option>
                                         @foreach($employees as $employee)
                                             <option value="{{$employee->id}}"
                                             >{{$employee->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                        @endforeach--}}
+{{--                                    </select>--}}
+{{--                                </div>--}}
                             </div>
                             <div class="form-group row">
                                 <label for="balance" class="col-sm-3" style="text-align: right">Balance</label>
@@ -200,7 +204,41 @@
         // $('#emp_section').hide();
         // $('#employee_id').attr('required',false);
         $(document).ready(function () {
-            $('#coupon_code').change(function () {
+            $('#customer_id').change(function () {
+                var customer_id = $(this).val();
+                // alert(customer_id);
+                $('#cust_id').val(customer_id);
+                $('#order_list').attr('hidden', false);
+                // var discount = 0;
+                // var sub_tot =  $('#sub_total').val();
+
+                $('.overlay').show();
+                $.ajax({
+                    url: 'get/coupon',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {getPriceQty:1, id:customer_id},
+                    success: function (data) {
+                        $('#discount').val(data);
+                        console.log(data);
+                         var coupon_code = data[0];
+                         $('#coupon_code').val(coupon_code);
+                       /* var amount = data[1];
+                        var amountType = data[2];*/
+                        $('#amount').val(data[1]);
+                        $('#amount_type').val(data[2]);
+                        $('#employee_id').val(data[3]);
+                        $('#employee_name').val(data[4]);
+
+                        calculate(0,0);
+                    }
+                });
+
+            });
+
+
+
+           /* $('#coupon_code').change(function () {
                 var code = $(this).val();
                 $('#code').val(code);
                 var discount = 0;
@@ -223,7 +261,7 @@
                     }
                 });
 
-            });
+            });*/
 
             $('#add').click(function (e) {
                 e.preventDefault();
@@ -253,12 +291,14 @@
             $('#invoice_item').delegate('.pid', 'change', function () {
                 var pid = $(this).val();
                 var tr = $(this).parent().parent();
+                var code = $('#coupon_code').val();
+                var customer_id = $('#customer_id').val();
                 $('.overlay').show();
                 $.ajax({
                     url: 'order/price',
                     method: 'POST',
                     dataType: 'json',
-                    data: {getPriceQty:1, id:pid},
+                    data: {getPriceQty:1, id:pid, customer_id:customer_id},
                     success: function (data) {
                        tr.find('.tqty').val(data['balance']);
                        tr.find('.pro_name').val(data['box']['case']);
@@ -286,10 +326,32 @@
                     }else
                     {
                         tr.find('.amt').html(qty.val()*tr.find('.price').val());
-                        calculate(0,0)
+
+                        var couponAmount = 0;
+                        var amount = $('#amount').val();
+                        var amountType = $('#amount_type').val();
+                        var sub_tot =  $('#sub_total').val();
+                        var tot_qty = 0;
+                        var discount = 0;
+                        $('.qty').each(function () {
+                            tot_qty = tot_qty + ($(this).val()*1);
+                        });
+
+                        if(amountType == 'Fixed')
+                        {
+                            couponAmount = amount*tot_qty;
+                        }else
+                        {
+                            couponAmount =sub_tot * amount/100;
+                        }
+                        discount = couponAmount;
+
+                        calculate(discount,0)
                     }
 
                 }
+
+
 
             });
 
@@ -309,7 +371,7 @@
             });
 
             function calculate(dis, paid) {
-                $('#coupon_code').val(0);
+                // $('#coupon_code').val(0);
                 var sub_total = 0;
                 var net_total = 0;
                 var discount = dis;
