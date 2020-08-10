@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterTableUsers extends Migration
+class AddCouponIdToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,7 @@ class AlterTableUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->integer('vendor')->unsigned()->default(0);
-            $table->string('religion')->nullable();
-            $table->string('gender')->nullable();
-            $table->date('dob')->nullable();
+            $table->integer('coupon_id')->unsigned()->default(0);
         });
     }
 
@@ -29,10 +26,7 @@ class AlterTableUsers extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('vendor');
-            $table->dropColumn('religion');
-            $table->dropColumn('gender');
-            $table->dropColumn('dob');
+            $table->dropColumn('coupon_id');
         });
     }
 }
