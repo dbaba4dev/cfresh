@@ -23,10 +23,4 @@ class IndexController extends Controller
     {
         return view('frontend.about.faq');
     }
-
-    public function getFooter(Request $request)
-    {
-        $query = $request->all();
-        return view('pdfFooter',compact('query'));
-    }
 }

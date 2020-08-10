@@ -1615,7 +1615,6 @@ footer {
 
     public function placeOrder(Request $request)
     {
-
         $setting = Setting::find(1);
 
         if ($request->isMethod('post'))

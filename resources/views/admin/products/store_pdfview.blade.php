@@ -172,7 +172,11 @@ $cases = \App\Box::all();
 {{--            $pdf->line(15, $y, $w - 15, $y, $color, 1);--}}
             $pdf->page_text(30, 810, "{{\Carbon\Carbon::parse(today())->toFormattedDateString()}}-({{\Carbon\Carbon::parse(now())->format('h:i A')}})", $font, 6, array(0,0,1));
             $pdf->page_text(270, 810, "Page {PAGE_NUM} of {PAGE_COUNT}", $font, 6, $color);
+<<<<<<< HEAD
             $pdf->page_text(530, 810, "cfresh.org", $font, 8, array(0,0,1));
+=======
+            $pdf->page_text(530, 810, "cfresh.com", $font, 8, array(0,0,1));
+>>>>>>> pdf-footer
         }
 </script>
 

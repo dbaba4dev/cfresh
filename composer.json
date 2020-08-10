@@ -20,8 +20,11 @@
         "h4cc/wkhtmltoimage-amd64": "0.12.x",
         "h4cc/wkhtmltopdf-amd64": "0.12.x",
         "intervention/image": "^2.5",
+<<<<<<< HEAD
         "knplabs/knp-snappy": "^1.2",
         "knplabs/knp-snappy-bundle": "^1.7",
+=======
+>>>>>>> pdf-footer
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",

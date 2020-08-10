@@ -384,4 +384,4 @@ Route::get('/admin/delete-product-image/{id}','CasesController@deleteProductImag
 Route::get('order/invoice', ['uses'=>'OrdersController@invoice', 'as'=>'order.invoice']);
 
 /*-----------------------------------------FUNCTIONS END----------------------------------------*/
-Route::get('pdf/footer', 'IndexController@getFooter')->name('pdf.footer');
+Route::get('/pdf', 'PdfController@generate')->name('gen.pdf');
